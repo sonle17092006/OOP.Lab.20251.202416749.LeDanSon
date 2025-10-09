@@ -1,0 +1,6 @@
+10.When should accessor methods be used?
+Accessor methods should be used sparingly, primarily when returning an interface-implementing object or in procedural boundary layers like JDBC. They are considered problematic due to their violation of encapsulation and the maintenance challenges they introduce by exposing implementation details.
+15.Why does the title of these two objects still remain after the call of swap(jungleDVD, cinderellaDVD)?
+The titles of jungleDVD and cinderellaDVD remain unchanged because Java is pass-by-value, and the swap method receives copies of the references, swapping them locally without affecting the original references in the main method.
+Why is the title of the JungleDVD changed after the call of changeTitle(jungleDVD, cinderellaDVD.getTitle())?
+The title of jungleDVD changes because changeTitle uses the copied reference to modify the original object's state with setTitle, and since the reference points to the same memory location, the change persists, though reassignment of the local dvd parameter does not affect the original reference.
