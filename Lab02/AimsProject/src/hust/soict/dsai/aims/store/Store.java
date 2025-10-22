@@ -3,7 +3,7 @@ package hust.soict.dsai.aims.store;
 import hust.soict.dsai.aims.disc.DigitalVideoDisc.DigitalVideoDisc;
 
 public class Store {
-    private DigitalVideoDisc[] itemsInStore = new DigitalVideoDisc[100]; // Assuming a max capacity of 100 DVDs
+    private DigitalVideoDisc[] itemsInStore = new DigitalVideoDisc[100]; // Maximum capacity of 100 DVDs
     private int qtyInStore = 0;
 
     public void addDVD(DigitalVideoDisc dvd) {
@@ -13,7 +13,7 @@ public class Store {
         }
         itemsInStore[qtyInStore] = dvd;
         qtyInStore++;
-        System.out.println("DVD has been added to the store: " + dvd.getTitle());
+        System.out.println("DVD added to the store: " + dvd.getTitle());
     }
 
     public void removeDVD(DigitalVideoDisc dvd) {
@@ -24,7 +24,7 @@ public class Store {
                 }
                 itemsInStore[qtyInStore - 1] = null;
                 qtyInStore--;
-                System.out.println("DVD has been removed from the store: " + dvd.getTitle());
+                System.out.println("DVD removed from the store: " + dvd.getTitle());
                 return;
             }
         }
