@@ -1,6 +1,6 @@
 package ass7;
 
-public class DigitalVideoDisk {
+public class DigitalVideoDisc {
 	private String title;
 	private String category;
 	private String director;
