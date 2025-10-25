@@ -1,33 +1,47 @@
 package hust.soict.dsai.aims.store;
 
-import hust.soict.dsai.aims.disc.DigitalVideoDisc.DigitalVideoDisc;
+import hust.soict.dsai.aims.media.Media;
+import hust.soict.dsai.aims.media.Playable;
+import java.util.ArrayList;
 
 public class Store {
-    private DigitalVideoDisc[] itemsInStore = new DigitalVideoDisc[100]; // Maximum capacity of 100 DVDs
-    private int qtyInStore = 0;
+    private ArrayList<Media> itemsInStore = new ArrayList<Media>();
 
-    public void addDVD(DigitalVideoDisc dvd) {
-        if (qtyInStore >= 100) {
-            System.out.println("The store is full. Cannot add more DVDs.");
-            return;
+    public void addMedia(Media media) {
+        if (media != null && !itemsInStore.contains(media)) {
+            itemsInStore.add(media);
+            System.out.println("Media added to the store: " + media.getTitle());
+        } else {
+            System.out.println("Media is already in the store or is null: " + (media != null ? media.getTitle() : "null"));
         }
-        itemsInStore[qtyInStore] = dvd;
-        qtyInStore++;
-        System.out.println("DVD added to the store: " + dvd.getTitle());
     }
 
-    public void removeDVD(DigitalVideoDisc dvd) {
-        for (int i = 0; i < qtyInStore; i++) {
-            if (itemsInStore[i] == dvd) {
-                for (int j = i; j < qtyInStore - 1; j++) {
-                    itemsInStore[j] = itemsInStore[j + 1];
-                }
-                itemsInStore[qtyInStore - 1] = null;
-                qtyInStore--;
-                System.out.println("DVD removed from the store: " + dvd.getTitle());
+    public void removeMedia(Media media) {
+        if (media != null && itemsInStore.contains(media)) {
+            itemsInStore.remove(media);
+            System.out.println("Media removed from the store: " + media.getTitle());
+        } else {
+            System.out.println("Media not found in the store or is null: " + (media != null ? media.getTitle() : "null"));
+        }
+    }
+
+    public void displayMediaDetails(int id) {
+        for (Media media : itemsInStore) {
+            if (media.getId() == id) {
+                System.out.println(media.toString());
                 return;
             }
         }
-        System.out.println("DVD not found in the store: " + dvd.getTitle());
+        System.out.println("No media found with ID: " + id);
+    }
+
+    public void playMedia(int id) {
+        for (Media media : itemsInStore) {
+            if (media.getId() == id && media instanceof Playable) {
+                ((Playable) media).play();
+                return;
+            }
+        }
+        System.out.println("No playable media found with ID: " + id);
     }
 }
