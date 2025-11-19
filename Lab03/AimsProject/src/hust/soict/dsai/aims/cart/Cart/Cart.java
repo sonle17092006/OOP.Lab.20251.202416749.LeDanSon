@@ -1,93 +1,70 @@
+// src/hust/soict/dsai/aims/cart/Cart.java
 package hust.soict.dsai.aims.cart;
 
 import hust.soict.dsai.aims.media.Media;
 import hust.soict.dsai.aims.media.Playable;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 public class Cart {
-    private ArrayList<Media> itemsOrdered = new ArrayList<Media>();
+    private final List<Media> itemsOrdered = new ArrayList<>();
 
     public void addMedia(Media media) {
         if (media != null && !itemsOrdered.contains(media)) {
             itemsOrdered.add(media);
-            System.out.println("The media has been added: " + media.getTitle());
-        } else {
-            System.out.println("The media is already in the cart or is null: " + (media != null ? media.getTitle() : "null"));
-        }
-    }
-
-    public void addMedia(Media... mediaList) {
-        for (Media media : mediaList) {
-            addMedia(media);
+            System.out.println("Added: " + media.getTitle());
         }
     }
 
     public void removeMedia(Media media) {
-        if (media != null && itemsOrdered.contains(media)) {
-            itemsOrdered.remove(media);
-            System.out.println("The media has been removed: " + media.getTitle());
-        } else {
-            System.out.println("The media is not in the cart or is null: " + (media != null ? media.getTitle() : "null"));
+        if (media != null && itemsOrdered.remove(media)) {
+            System.out.println("Removed: " + media.getTitle());
         }
     }
 
     public float totalCost() {
-        float total = 0.0f;
-        for (Media media : itemsOrdered) {
-            total += media.getCost();
-        }
-        return total;
+        return (float) itemsOrdered.stream().mapToDouble(Media::getCost).sum();
     }
 
     public void print() {
-        System.out.println("***********************CART***********************");
-        System.out.println("Ordered Items:");
+        System.out.println("*********************** CART ***********************");
         for (int i = 0; i < itemsOrdered.size(); i++) {
-            System.out.println((i + 1) + ". " + itemsOrdered.get(i).toString());
+            System.out.println((i + 1) + ". " + itemsOrdered.get(i));
         }
-        System.out.println("Total cost: " + totalCost() + " $");
+        System.out.printf("Total cost: %.2f $\n", totalCost());
         System.out.println("***************************************************");
     }
 
     public void sortByTitleCost() {
-        Collections.sort(itemsOrdered, Media.COMPARE_BY_TITLE_COST);
+        itemsOrdered.sort(Media.COMPARE_BY_TITLE_COST);
     }
 
     public void sortByCostTitle() {
-        Collections.sort(itemsOrdered, Media.COMPARE_BY_COST_TITLE);
+        itemsOrdered.sort(Media.COMPARE_BY_COST_TITLE);
     }
 
     public void searchById(int id) {
-        for (Media media : itemsOrdered) {
-            if (media.getId() == id) {
-                System.out.println("Found: " + media.toString());
-                return;
-            }
-        }
-        System.out.println("No match found for ID: " + id);
+        itemsOrdered.stream()
+                .filter(m -> m.getId() == id)
+                .findFirst()
+                .ifPresentOrElse(
+                    m -> System.out.println("Found: " + m),
+                    () -> System.out.println("No media found with ID: " + id)
+                );
     }
 
-    public void searchByTitle(String title) {
-        boolean found = false;
-        for (Media media : itemsOrdered) {
-            if (media.getTitle().toLowerCase().contains(title.toLowerCase())) {
-                System.out.println("Found: " + media.toString());
-                found = true;
-            }
-        }
-        if (!found) {
-            System.out.println("No match found for title: " + title);
-        }
-    }
+    public void searchByTitle(String keyword) {
+        boolean found = itemsOrdered.stream()
+                .anyMatch(m -> m.getTitle() != null &&
+                        m.getTitle().toLowerCase().contains(keyword.toLowerCase()));
 
-    public void playMedia(int id) {
-        for (Media media : itemsOrdered) {
-            if (media.getId() == id && media instanceof Playable) {
-                ((Playable) media).play();
-                return;
-            }
+        if (found) {
+            itemsOrdered.stream()
+                    .filter(m -> m.getTitle() != null &&
+                            m.getTitle().toLowerCase().contains(keyword.toLowerCase()))
+                    .forEach(m -> System.out.println("Found: " + m));
+        } else {
+            System.out.println("No match found for title: " + keyword);
         }
-        System.out.println("No playable media found with ID: " + id);
     }
 }
