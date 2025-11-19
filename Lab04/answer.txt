@@ -1,0 +1,30 @@
+Reading Assignment Answers:
+
+1. What are the advantages of Polymorphism?
+   - Polymorphism allows for flexibility and reusability in code by enabling a single interface to represent different underlying forms (data types or classes). It supports the use of a common method or interface across various classes, reducing the need for explicit type checking or casting. This leads to more maintainable and scalable code, as new subclasses can be added without modifying existing code that uses the polymorphic interface. Additionally, it enhances readability by abstracting implementation details, allowing developers to focus on the interface rather than specific implementations.
+
+2. How is Inheritance useful to achieve Polymorphism in Java?
+   - Inheritance is a fundamental mechanism to achieve polymorphism in Java by allowing a subclass to inherit properties and methods from a superclass. This enables the subclass to override methods (e.g., `toString()` or `play()`) defined in the superclass, providing specific implementations. When objects of these subclasses are treated as instances of the superclass (e.g., `Media` reference to `DigitalVideoDisc` or `CompactDisc`), the overridden method of the actual object type is invoked at runtime (dynamic dispatch). This inheritance hierarchy facilitates polymorphic behavior, allowing a uniform treatment of diverse objects through a common interface or superclass.
+
+3. What are the differences between Polymorphism and Inheritance in Java?
+   - **Definition**: Inheritance is a mechanism where one class (subclass) inherits properties and methods from another class (superclass), establishing an "is-a" relationship. Polymorphism is the ability of an object to take on multiple forms, where a single interface or method can behave differently based on the object’s actual type.
+   - **Purpose**: Inheritance focuses on code reuse and establishing relationships between classes, while polymorphism focuses on providing flexibility in method invocation and behavior across different classes.
+   - **Implementation**: Inheritance is implemented using the `extends` keyword (for classes) or `implements` (for interfaces). Polymorphism is achieved through method overriding (in inheritance) or interface implementation, with runtime polymorphism occurring via dynamic method dispatch.
+   - **Scope**: Inheritance is a structural relationship, whereas polymorphism is a behavioral concept that can exist without inheritance (e.g., via interfaces alone), though inheritance often supports it.
+   - **Example**: Inheritance is seen in `Book extends Media`, while polymorphism is demonstrated when `Media m = new Book(); m.toString()` calls `Book`'s `toString()`.
+
+Question from Section 17:
+- Alternatively, to compare items in the cart, instead of using the Comparator class, you can use the Comparable interface and override the compareTo() method. Suppose we are taking this Comparable interface approach.
+  - **What class should implement the Comparable interface?**
+    - The `Media` class should implement the `Comparable<Media>` interface, as it is the common superclass for all media types (`DigitalVideoDisc`, `Book`, `CompactDisc`). This allows all subclasses to inherit the comparison behavior, ensuring consistency across the hierarchy.
+  - **In those classes, how should you implement the compareTo() method to reflect the ordering that we want?**
+    - The `compareTo()` method in `Media` should be implemented to support a default ordering. For example, to reflect the "sort by cost then title" requirement, it could be:
+      ```java
+      @Override
+      public int compareTo(Media m) {
+          int costComparison = Float.compare(this.getCost(), m.getCost());
+          if (costComparison != 0) {
+              return -costComparison; // Decreasing cost order
+          }
+          return this.getTitle().compareToIgnoreCase(m.getTitle());
+      }
