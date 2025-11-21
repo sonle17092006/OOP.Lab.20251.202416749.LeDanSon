@@ -1,61 +1,76 @@
 package temp;
 
 public class DigitalVideoDisc {
+
+    // Thuộc tính class (static) – đếm tổng số DVD đã tạo
+    private static int nbDigitalVideoDiscs = 0;
+
+    // Thuộc tính instance – mỗi DVD có 1 ID duy nhất
+    private int id;
+
     private String title;
     private String category;
     private String director;
     private int length;
     private float cost;
 
-    // TODO: 4 Constructor theo đúng yêu cầu bài tập
-    // 1. Constructor chỉ có title
+    // Constructor 1: chỉ title
     public DigitalVideoDisc(String title) {
         this.title = title;
+        this.id = ++nbDigitalVideoDiscs;        // tăng trước → ID bắt đầu từ 1
     }
 
-    // 2. Constructor có category, title, cost
+    // Constructor 2: title, category, cost
     public DigitalVideoDisc(String title, String category, float cost) {
         this.title = title;
         this.category = category;
         this.cost = cost;
+        this.id = ++nbDigitalVideoDiscs;
     }
 
-    // 3. Constructor có director, category, title, cost
+    // Constructor 3: title, category, director, cost
     public DigitalVideoDisc(String title, String category, String director, float cost) {
         this.title = title;
         this.category = category;
         this.director = director;
         this.cost = cost;
+        this.id = ++nbDigitalVideoDiscs;
     }
 
-    // 4. Constructor đầy đủ tất cả thuộc tính
+    // Constructor 4: đầy đủ tất cả thuộc tính
     public DigitalVideoDisc(String title, String category, String director, int length, float cost) {
         this.title = title;
         this.category = category;
         this.director = director;
         this.length = length;
         this.cost = cost;
+        this.id = ++nbDigitalVideoDiscs;
     }
 
-    // TODO: Chỉ tạo GETTER (không tạo setter) theo yêu cầu
-    public String getTitle() {
-        return title;
+    // Getter cho ID (rất hay cần dùng)
+    public int getId() {
+        return id;
     }
 
-    public String getCategory() {
-        return category;
+    // Getter cho static counter (để kiểm tra nếu cần)
+    public static int getNbDigitalVideoDiscs() {
+        return nbDigitalVideoDiscs;
     }
 
-    public String getDirector() {
-        return director;
-    }
+    // Các getter còn lại
+    public String getTitle() { return title; }
+    public String getCategory() { return category; }
+    public String getDirector() { return director; }
+    public int getLength() { return length; }
+    public float getCost() { return cost; }
 
-    public int getLength() {
-        return length;
+    // toString để in đẹp hơn khi test
+    @Override
+    public String toString() {
+        return "DVD [ID=" + id + "] - " + title +
+               (category != null ? " - " + category : "") +
+               (director != null ? " - " + director : "") +
+               (length > 0 ? " - " + length + "min" : "") +
+               " - " + cost + " $";
     }
-
-    public float getCost() {
-        return cost;
-    }
-
 }
