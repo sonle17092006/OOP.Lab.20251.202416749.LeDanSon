@@ -36,6 +36,20 @@ public class Cart {
         }
         System.out.println("Disc not found in cart.");
     }
+    
+    public void addDigitalVideoDisc(DigitalVideoDisc[] dvdList) {
+        for (DigitalVideoDisc disc : dvdList) {
+            if (disc != null) {
+                addDigitalVideoDisc(disc);  // tận dụng lại method cũ để kiểm tra giới hạn
+            }
+        }
+        System.out.println("The list of DVDs has been added.");
+    }
+    
+    public void addDigitalVideoDisc(DigitalVideoDisc dvd1, DigitalVideoDisc dvd2) {
+        addDigitalVideoDisc(dvd1);   // tái sử dụng method cũ cho gọn
+        addDigitalVideoDisc(dvd2);
+    }
 
     public float totalCost() {
         float tc = 0.0f;
