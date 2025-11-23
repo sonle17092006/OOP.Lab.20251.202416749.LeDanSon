@@ -1,13 +1,12 @@
 package hust.soict.dsai.aims;
 
+import java.util.List;
 import java.util.Scanner;
 import hust.soict.dsai.aims.cart.Cart;
-import hust.soict.dsai.aims.media.*;
-import java.util.List;
 import hust.soict.dsai.aims.store.Store;
+import hust.soict.dsai.aims.media.*;
 
 public class Aims {
-
     private static Store store = new Store();
     private static Cart cart = new Cart();
     private static Scanner scanner = new Scanner(System.in);
@@ -15,14 +14,22 @@ public class Aims {
     public static void main(String[] args) {
         // Thêm sẵn vài media để test
         store.addMedia(new Book("Harry Potter", "Fantasy", 29.99f));
+        store.addMedia(new Book("The Hobbit", "Fantasy", 25.50f));
         store.addMedia(new DigitalVideoDisc("The Lion King", "Animation", "Roger Allers", 87, 19.95f));
         store.addMedia(new DigitalVideoDisc("Star Wars", "Sci-Fi", "George Lucas", 124, 24.95f));
+        store.addMedia(new DigitalVideoDisc("Inception", "Sci-Fi", "Christopher Nolan", 148, 29.99f));
         store.addMedia(new CompactDisc("1989", "Pop", "Taylor Swift", 50f, "Taylor Swift"));
+        store.addMedia(new CompactDisc("Abbey Road", "Rock", "The Beatles", 45f, "The Beatles"));
+        store.addMedia(new CompactDisc("Thriller", "Pop", "Michael Jackson", 60f, "Michael Jackson"));
+
+        // Thêm một số media vào Cart từ Store
+        cart.addMedia(store.getItemsInStore().get(0)); // Harry Potter
+        cart.addMedia(store.getItemsInStore().get(2)); // The Lion King
+        cart.addMedia(store.getItemsInStore().get(5)); // 1989
 
         while (true) {
             showMenu();
             int choice = getChoice(0, 4);
-
             switch (choice) {
                 case 1 -> viewStore();
                 case 2 -> updateStore();
@@ -54,7 +61,6 @@ public class Aims {
             store.print();
             storeMenu();
             int choice = getChoice(0, 4);
-
             switch (choice) {
                 case 1 -> seeMediaDetails();
                 case 2 -> addToCart();
@@ -79,50 +85,42 @@ public class Aims {
 
     // ==================== SEE MEDIA DETAILS ====================
     public static void seeMediaDetails() {
-        System.out.print("Enter the title of the media: ");
-        String title = scanner.nextLine();
-        List<Media> results = store.searchByTitle(title);
-        if (results.isEmpty()) {
-            System.out.println("No media found.");
-            return;
-        }
-        System.out.println("Found " + results.size() + " media(s):");
-        for (int i = 0; i < results.size(); i++) {
-            System.out.println((i + 1) + ". " + results.get(i));
-        }
-        System.out.print("Choose media to add to cart (0 to cancel): ");
-        int idx = getChoice(0, results.size());
-        if (idx > 0) {
-            cart.addMedia(results.get(idx - 1));
+        System.out.println("Id to display: ");
+        String s = scanner.nextLine();
+        int id = Integer.parseInt(s);
+        if (id > 0 && id <= store.getItemsInStore().size()) {
+            System.out.println(store.getItemsInStore().get(id - 1));
+        } else {
+            System.out.println("Invalid Id.");
         }
     }
 
     // ==================== ADD TO CART ====================
     public static void addToCart() {
-        System.out.print("Enter the title of the media to add: ");
-        String title = scanner.nextLine();
-        List<Media> results = store.searchByTitle(title);
-        if (results.isEmpty()) {
-            System.out.println("No media found.");
+        System.out.println("Id to add to cart: ");
+        String s = scanner.nextLine();
+        int id = Integer.parseInt(s);
+        if (id > 0 && id <= store.getItemsInStore().size()) {
+            cart.addMedia(store.getItemsInStore().get(id - 1));
         } else {
-            cart.addMedia(results.get(0)); // thêm cái đầu tiên tìm được
+            System.out.println("Invalid Id.");
         }
     }
 
     // ==================== PLAY MEDIA ====================
     public static void playMedia() {
-        System.out.print("Enter the title of the media to play: ");
-        String title = scanner.nextLine();
-        List<Media> results = store.searchByTitle(title);
-        if (results.isEmpty()) {
-            System.out.println("No media found.");
-            return;
-        }
-        Media media = results.get(0);
-        if (media instanceof Playable) {
-            ((Playable) media).play();
+        System.out.println("Id to play: ");
+        String s = scanner.nextLine();
+        int id = Integer.parseInt(s);
+        if (id > 0 && id <= store.getItemsInStore().size()) {
+            Media media = store.getItemsInStore().get(id - 1);
+            if (media instanceof Playable) {
+                ((Playable) media).play();
+            } else {
+                System.out.println("This media cannot be played.");
+            }
         } else {
-            System.out.println("This media cannot be played.");
+            System.out.println("Invalid ID.");
         }
     }
 
@@ -142,8 +140,19 @@ public class Aims {
             List<Media> results = store.searchByTitle(title);
 
             if (choice == 1) {
-                // Thêm media mới (giả lập)
-                System.out.println("Add media feature not fully implemented in this demo.");
+                System.out.println("\nChoose type:");
+                System.out.println("1. DVD");
+                System.out.println("2. CD");
+                System.out.println("3. Book");
+                System.out.println("0. Back");
+                int choice2 = getChoice(0, 3);
+                if (choice2 == 0) return;
+                switch (choice2) {
+                    case 1 -> store.addMedia(new DigitalVideoDisc(title, "Unknown", "Unknown", 0, 20.0f));
+                    case 2 -> store.addMedia(new CompactDisc(title, "Unknown", "Unknown", 0, 30.0f, "Unknown"));
+                    case 3 -> store.addMedia(new Book(title, "Unknown", 25.0f));
+                }
+                System.out.println("Media added successfully!");
             } else if (choice == 2) {
                 if (!results.isEmpty()) {
                     store.removeMedia(results.get(0));
@@ -160,7 +169,6 @@ public class Aims {
             cart.print();
             cartMenu();
             int choice = getChoice(0, 5);
-
             switch (choice) {
                 case 1 -> filterMediaInCart();
                 case 2 -> sortCartMenu();
@@ -185,8 +193,36 @@ public class Aims {
         System.out.print("Please choose a number: 0-1-2-3-4-5: ");
     }
 
-    // Các method phụ trợ (filter, sort, remove, play, place order) có thể thêm sau
-    public static void filterMediaInCart() { System.out.println("Filter feature coming soon..."); }
+    public static void filterMediaInCart() {
+        System.out.println("Enter type: ");
+        String type = scanner.nextLine().trim();
+        type = type.toLowerCase();
+        boolean found = false;
+
+        for (Media media : cart.getItemsOrdered()) {
+            if (type.contains("dvd") || type.contains("digital")) {
+                if (media instanceof DigitalVideoDisc) {
+                    System.out.println("Found DVD: " + media);
+                    found = true;
+                }
+            } else if (type.contains("cd") || type.contains("compact")) {
+                if (media instanceof CompactDisc) {
+                    System.out.println("Found CD: " + media);
+                    found = true;
+                }
+            } else if (type.contains("book")) {
+                if (media instanceof Book) {
+                    System.out.println("Found Book: " + media);
+                    found = true;
+                }
+            }
+        }
+
+        if (!found) {
+            System.out.println("No media found for type: " + type);
+        }
+    }
+
     public static void sortCartMenu() {
         System.out.println("1. Sort by title-cost");
         System.out.println("2. Sort by cost-title");
@@ -195,11 +231,37 @@ public class Aims {
         else cart.sortByCostTitle();
         cart.print();
     }
-    public static void removeFromCart() { System.out.println("Remove feature coming soon..."); }
-    public static void playMediaInCart() { System.out.println("Play feature coming soon..."); }
+
+    public static void removeFromCart() {
+        System.out.println("Id to remove: ");
+        String s = scanner.nextLine();
+        int id = Integer.parseInt(s);
+        if (id > 0 && id <= cart.getItemsOrdered().size()) {
+            cart.removeMedia(cart.getItemsOrdered().get(id - 1));
+        } else {
+            System.out.println("Invalid Id.");
+        }
+    }
+
+    public static void playMediaInCart() {
+        System.out.println("Id to play: ");
+        String s = scanner.nextLine();
+        int id = Integer.parseInt(s);
+        if (id > 0 && id <= cart.getItemsOrdered().size()) {
+            Media media = cart.getItemsOrdered().get(id - 1);
+            if (media instanceof Playable) {
+                ((Playable) media).play();
+            } else {
+                System.out.println("This media cannot be played.");
+            }
+        } else {
+            System.out.println("Invalid ID.");
+        }
+    }
+
     public static void placeOrder() {
         System.out.println("Order placed! Total cost: " + cart.totalCost() + " $");
-        cart = new Cart(); // xóa giỏ hàng
+        cart = new Cart(); // Xóa giỏ hàng
     }
 
     // Helper method để nhập số hợp lệ
