@@ -1,8 +1,8 @@
-package ass63;
+
 
 import java.util.Scanner;
 
-public class StarTriangle {
+public class Assignment6_3 {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 

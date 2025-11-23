@@ -1,9 +1,9 @@
-package ass65;
+
 
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class ArraySortSumAverage {
+public class Assignment6_5 {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 

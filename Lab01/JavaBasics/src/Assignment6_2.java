@@ -1,7 +1,7 @@
-package ass62;
+
 
 import java.util.Scanner;
-public class InputFromKeyboard {
+public class Assignment6_2 {
     public static void main(String args[]) {
         Scanner keyboard = new Scanner(System.in);
 

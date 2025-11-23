@@ -1,8 +1,8 @@
-package ass66;
+
 
 import java.util.Scanner;
 
-public class MatrixAddition {
+public class Assignment6_6 {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
