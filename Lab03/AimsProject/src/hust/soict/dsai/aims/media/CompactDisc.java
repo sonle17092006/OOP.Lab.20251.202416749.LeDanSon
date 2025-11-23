@@ -15,6 +15,7 @@ public class CompactDisc extends Disc implements Playable{
         this.artist = artist;
     }
 
+    
     public CompactDisc(String title, String category, String director, 
                        float cost, String artist) {
         super(title, category, director, cost);
@@ -25,6 +26,10 @@ public class CompactDisc extends Disc implements Playable{
                        int length, float cost, String artist) {
         super(title, category, director, length, cost);
         this.artist = artist;
+    }
+    public CompactDisc(String title)
+    {
+    	super(title);
     }
 
     // ==================== Chỉ có getter cho artist (không có setter) ====================

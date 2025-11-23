@@ -92,7 +92,7 @@ public class Cart {
             if (media.getTitle().toLowerCase().contains(title.toLowerCase())) {
                 System.out.println("Found: " + media);
                 found = true;
-            }
+            }  
         }
         if (!found) {
             System.out.println("No media found with title containing: \"" + title + "\"");

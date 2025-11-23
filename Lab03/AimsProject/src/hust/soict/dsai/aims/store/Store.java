@@ -15,7 +15,7 @@ public class Store {
         if (media == null) {
             System.out.println("Cannot add null media to store.");
             return;
-        }
+        } 
         if (itemsInStore.contains(media)) {
             System.out.println("Media \"" + media.getTitle() + "\" is already in the store.");
         } else {

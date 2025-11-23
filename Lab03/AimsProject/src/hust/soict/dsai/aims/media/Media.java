@@ -1,6 +1,6 @@
 package hust.soict.dsai.aims.media;
 import java.util.Comparator;
-public abstract class Media {   // ← XÓA implements Comparable<Media>
+public abstract class Media implements Playable{   // ← XÓA implements Comparable<Media>
 
     protected int id;
     protected String title;
@@ -44,5 +44,7 @@ public abstract class Media {   // ← XÓA implements Comparable<Media>
         Media other = (Media) obj;                       // 3. ← CHÍNH LÀ DÒNG NÀY!
         return title.equals(other.getTitle());
     }
+    public void play() {
+	}
 
 }
