@@ -1,0 +1,22 @@
+# ==================== ECLIPSE ====================
+.project
+.classpath
+.settings/
+.metadata/
+
+# ==================== COMPILED FILES ====================
+bin/
+*.class
+*.jar
+
+# ==================== TEMP FILES ====================
+*.tmp
+*.log
+*.bak
+
+# ==================== OS FILES ====================
+.DS_Store
+Thumbs.db
+
+# ==================== ASTAH ====================
+*.asta.lock
