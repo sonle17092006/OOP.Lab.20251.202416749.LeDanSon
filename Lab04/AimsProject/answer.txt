@@ -1,0 +1,25 @@
+D
+
+9. Which classes are aggregates of other classes? Checking all constructors of whole classes if they initialize for their parts?
+- Cart aggregates Media (ArrayList<Media>)
+- Store aggregates Media (ArrayList<Media>)
+- Book aggregates String (authors - ArrayList<String>)
+- CompactDisc aggregates Track (ArrayList<Track>)
+Tất cả constructor của các class cha và class con đã được viết lại để khởi tạo đúng các phần (parts) tương ứng, ví dụ CompactDisc gọi super(title, category, cost, director, length) rồi khởi tạo artist và new ArrayList<Track>(). Các setter không cần thiết đã bị xóa.
+
+
+
+
+12. Comparator vs Comparable
+Nếu dùng Comparable:
+- Class Media phải implement Comparable<Media>
+- Chỉ có duy nhất 1 cách compareTo() → chỉ hỗ trợ 1 kiểu sắp xếp (ví dụ title → cost)
+→ Không thể có 2 cách sắp xếp cùng lúc (title-cost và cost-title)
+
+Nếu DVD có luật riêng (title → length giảm dần → cost):
+- Không thể làm được nếu dùng Comparable trên Media (vì chỉ 1 compareTo)
+- Phải dùng Comparator riêng (hoặc nhiều class con override compareTo khác nhau, rất rối)
+→ Vì vậy dùng 2 Comparator (COMPARE_BY_TITLE_COST và COMPARE_BY_COST_TITLE) là hợp lý hơn, linh hoạt hơn.
+
+
+```
