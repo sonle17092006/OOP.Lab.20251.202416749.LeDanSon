@@ -1,0 +1,44 @@
+Question 1:
+Actors: Customer
+Use cases:
+- Add Item to Cart
+- Remove Item from Cart
+- Update Quantity
+- View Cart
+- Checkout
+(See use case diagram in folder Requirement)
+
+Question 2:
+Encapsulation is wrapping data (attributes) and methods into a single unit and restricting direct access to them.
+We need it to protect data integrity and hide implementation details.
+Two techniques I used:
+1. Declare all attributes private
+2. Provide public getter/setter methods (and sometimes package-private or protected when needed)
+
+Question 3:
+- Number of classes: 3 (Item, CartItem, ShoppingCart)
+- Relationships:
+  ShoppingCart ──► CartItem (composition)
+  CartItem ───► Item (composition)
+- All attributes are private to enforce encapsulation.
+
+Question 4:
+a. Constructor example:
+   public ShoppingCart() {
+       items = new ArrayList<>();
+   }
+
+b. Getter/setter example:
+   public int getQuantity() { return quantity; }
+   public void setQuantity(int quantity) { 
+       if (quantity > 0) this.quantity = quantity; 
+   }
+
+c. Overloaded methods:
+   public void addItem(Item item) { addItem(item, 1); }
+   public void addItem(Item item, int quantity) { ... }
+
+Question 5:
+Instance member: private ArrayList<CartItem> items;          (mỗi giỏ hàng có danh sách riêng)
+Static member:  private static int cartCount = 0;            (đếm tổng số giỏ hàng đã tạo)
+→ I chose static for cartCount because this value is shared by all ShoppingCart instances.
