@@ -1,86 +1,68 @@
 package hust.soict.dsai.aims.store;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import hust.soict.dsai.aims.media.Media;
+import hust.soict.dsai.aims.disc.DigitalVideoDisc;
 
 public class Store {
+    public static final int MAX_NUMBERS_IN_STORE = 1000;  // or any reasonable number
+    private DigitalVideoDisc[] itemsInStore;
+    private int qtyStored = 0;
 
-    // BỎ mảng cũ → dùng ArrayList<Media>
-    private List<Media> itemsInStore = new ArrayList<>();
+    // Constructor
+    public Store() {
+        itemsInStore = new DigitalVideoDisc[MAX_NUMBERS_IN_STORE];
+    }
 
-    // ==================== addMedia ====================
-    public void addMedia(Media media) {
-        if (media == null) {
-            System.out.println("Cannot add null media to store.");
+    // Method: Add a DVD to the store
+    public void addDVD(DigitalVideoDisc dvd) {
+        if (qtyStored >= MAX_NUMBERS_IN_STORE) {
+            System.out.println("Store is full. Cannot add more DVDs.");
             return;
-        } 
-        if (itemsInStore.contains(media)) {
-            System.out.println("Media \"" + media.getTitle() + "\" is already in the store.");
-        } else {
-            itemsInStore.add(media);
-            System.out.println("Media \"" + media.getTitle() + "\" has been added to the store.");
+        }
+        
+        // Check if the DVD is already in the store (optional but good practice)
+        for (int i = 0; i < qtyStored; i++) {
+            if (itemsInStore[i].equals(dvd)) {
+                System.out.println("DVD \"" + dvd.getTitle() + "\" is already in the store.");
+                return;
+            }
+        }
+
+        itemsInStore[qtyStored] = dvd;
+        qtyStored++;
+        System.out.println("DVD \"" + dvd.getTitle() + "\" has been added to the store.");
+    }
+
+    // Method: Remove a DVD from the store
+    public void removeDVD(DigitalVideoDisc dvd) {
+        boolean found = false;
+        for (int i = 0; i < qtyStored; i++) {
+            if (itemsInStore[i].equals(dvd)) {
+                found = true;
+                // Shift all elements to the left
+                for (int j = i; j < qtyStored - 1; j++) {
+                    itemsInStore[j] = itemsInStore[j + 1];
+                }
+                itemsInStore[--qtyStored] = null;  // clear last position
+                System.out.println("DVD \"" + dvd.getTitle() + "\" has been removed from the store.");
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("DVD \"" + dvd.getTitle() + "\" was not found in the store.");
         }
     }
 
-    // ==================== removeMedia ====================
-    public void removeMedia(Media media) {
-        if (media == null) {
-            System.out.println("Cannot remove null media from store.");
-            return;
-        }
-        if (itemsInStore.remove(media)) {
-            System.out.println("Media \"" + media.getTitle() + "\" has been removed from the store.");
-        } else {
-            System.out.println("Media \"" + media.getTitle() + "\" not found in the store.");
-        }
-    }
-
-    // ==================== print store (để test) ====================
-    public void print() {
+    // Optional: Print all DVDs in store (very useful for testing)
+    public void printStore() {
         System.out.println("*********************** STORE ***********************");
-        if (itemsInStore.isEmpty()) {
-            System.out.println("The store is empty.");
+        System.out.println("Items in store (" + qtyStored + "):");
+        if (qtyStored == 0) {
+            System.out.println("  [Empty]");
         } else {
-            System.out.println("Items in store:");
-            for (int i = 0; i < itemsInStore.size(); i++) {
-                System.out.println((i + 1) + ". " + itemsInStore.get(i));
+            for (int i = 0; i < qtyStored; i++) {
+                System.out.println((i + 1) + ". " + itemsInStore[i].toString());
             }
         }
-        System.out.println("***************************************************");
-    }
-
-    // ==================== search by title ====================
- // Trong class Store
-    public List<Media> searchByTitle(String title) {
-        List<Media> results = new ArrayList<>();
-        if (title == null || title.trim().isEmpty()) {
-            System.out.println("Search title cannot be empty.");
-            return results;
-        }
-
-        String keyword = title.toLowerCase();
-        for (Media media : itemsInStore) {
-            if (media.getTitle() != null && media.getTitle().toLowerCase().contains(keyword)) {
-                results.add(media);
-            }
-        }
-
-        // In kết quả tìm kiếm
-        if (results.isEmpty()) {
-            System.out.println("No media found with title containing: \"" + title + "\"");
-        } else {
-            System.out.println("Found " + results.size() + " media(s):");
-            for (int i = 0; i < results.size(); i++) {
-                System.out.println((i + 1) + ". " + results.get(i));
-            }
-        }
-        return results;
-    }
-
-    // Getter (nếu cần)
-    public List<Media> getItemsInStore() {
-        return itemsInStore;
+        System.out.println("*****************************************************");
     }
 }

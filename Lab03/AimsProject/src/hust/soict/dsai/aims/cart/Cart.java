@@ -1,117 +1,82 @@
 package hust.soict.dsai.aims.cart;
-import java.util.Collections;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import hust.soict.dsai.aims.media.Media;
+import hust.soict.dsai.aims.disc.DigitalVideoDisc;
 
 public class Cart {
-
     public static final int MAX_NUMBERS_ORDERED = 20;
+    private DigitalVideoDisc itemsOrdered[] = 
+            new DigitalVideoDisc[MAX_NUMBERS_ORDERED];
+    private int qtyOrdered = 0;
 
-    // BỎ mảng cũ + qtyOrdered
-    // DÙNG ArrayList<Media> thay thế
-    private List<Media> itemsOrdered = new ArrayList<>();
-
-    // ==================== addMedia (thay thế addDigitalVideoDisc) ====================
-    public void addMedia(Media media) {
-        if (media == null) {
-            System.out.println("Cannot add null media.");
-            return;
-        }
-        if (itemsOrdered.size() >= MAX_NUMBERS_ORDERED) {
-            System.out.println("Cart is full! Cannot add more items.");
-            return;
-        }
-        if (itemsOrdered.contains(media)) {
-            System.out.println("Media \"" + media.getTitle() + "\" is already in the cart.");
+    // 1. Original method: add one DVD
+    public void addDigitalVideoDisc(DigitalVideoDisc disc) {
+        if (qtyOrdered < MAX_NUMBERS_ORDERED) {
+            itemsOrdered[qtyOrdered] = disc;
+            qtyOrdered++;
+            System.out.println("The disc \"" + disc.getTitle() + "\" has been added.");
         } else {
-            itemsOrdered.add(media);
-            System.out.println("Media \"" + media.getTitle() + "\" has been added to the cart.");
+            System.out.println("The cart is almost full.");
         }
     }
 
-    // ==================== removeMedia ====================
-    public void removeMedia(Media media) {
-        if (media == null) {
-            System.out.println("Cannot remove null media.");
-            return;
-        }
-        if (itemsOrdered.remove(media)) {
-            System.out.println("Media \"" + media.getTitle() + "\" has been removed from the cart.");
+    // 2. Overloading: add TWO DVDs (different number of parameters)
+    public void addDigitalVideoDisc(DigitalVideoDisc dvd1, DigitalVideoDisc dvd2) {
+        if (qtyOrdered + 2 <= MAX_NUMBERS_ORDERED) {
+            itemsOrdered[qtyOrdered++] = dvd1;
+            itemsOrdered[qtyOrdered++] = dvd2;
+            System.out.println("The discs \"" + dvd1.getTitle() + "\" and \"" + 
+                               dvd2.getTitle() + "\" have been added.");
         } else {
-            System.out.println("Media \"" + media.getTitle() + "\" not found in the cart.");
+            System.out.println("The cart is almost full. Cannot add these two discs.");
         }
     }
 
-    // ==================== totalCost() – CẬP NHẬT ====================
+    // 3. Overloading: add an ARRAY of DVDs (different type of parameter)
+    public void addDigitalVideoDisc(DigitalVideoDisc[] dvdList) {
+        if (qtyOrdered + dvdList.length > MAX_NUMBERS_ORDERED) {
+            System.out.println("The cart is almost full. Cannot add all discs from the list.");
+            return;
+        }
+        for (DigitalVideoDisc disc : dvdList) {
+            itemsOrdered[qtyOrdered++] = disc;
+            System.out.println("The disc \"" + disc.getTitle() + "\" has been added.");
+        }
+    }
+
+
+    // Remove a DVD from cart
+    public void removeDigitalVideoDisc(DigitalVideoDisc disc) {
+        for (int i = 0; i < qtyOrdered; i++) {
+            if (itemsOrdered[i].equals(disc)) { // Note: you may need to override equals() later
+                // Shift all items to the left
+                for (int j = i; j < qtyOrdered - 1; j++) {
+                    itemsOrdered[j] = itemsOrdered[j + 1];
+                }
+                itemsOrdered[--qtyOrdered] = null;
+                System.out.println("The disc \"" + disc.getTitle() + "\" has been removed.");
+                return;
+            }
+        }
+        System.out.println("Disc not found in cart.");
+    }
+
+    // Calculate total cost of all DVDs in cart
     public float totalCost() {
         float total = 0.0f;
-        for (Media media : itemsOrdered) {
-            total += media.getCost();
+        for (int i = 0; i < qtyOrdered; i++) {
+            total += itemsOrdered[i].getCost();
         }
         return total;
     }
 
-    // ==================== print() – in giỏ hàng đẹp ====================
+    // Print the cart (required in the lab)
     public void print() {
-        System.out.println("*********************** CART ***********************");
+        System.out.println("***********************CART***********************");
         System.out.println("Ordered Items:");
-
-        if (itemsOrdered.isEmpty()) {
-            System.out.println("The cart is empty.");
-        } else {
-            for (int i = 0; i < itemsOrdered.size(); i++) {
-                System.out.println((i + 1) + ". " + itemsOrdered.get(i));
-            }
+        for (int i = 0; i < qtyOrdered; i++) {
+            System.out.println((i + 1) + ". " + itemsOrdered[i].toString());
         }
-
-        System.out.printf("Total cost: %.2f $\n", totalCost());
+        System.out.println("Total cost: " + totalCost() + " $");
         System.out.println("***************************************************");
-    }
-
-    // ==================== search by ID ====================
-    public void searchById(int id) {
-        boolean found = false;
-        for (Media media : itemsOrdered) {
-            if (media.getId() == id) {
-                System.out.println("Found: " + media);
-                found = true;
-            }
-        }
-        if (!found) {
-            System.out.println("No media found with ID: " + id);
-        }
-    }
-
-    // ==================== search by title ====================
-    public void searchByTitle(String title) {
-        boolean found = false;
-        for (Media media : itemsOrdered) {
-            if (media.getTitle().toLowerCase().contains(title.toLowerCase())) {
-                System.out.println("Found: " + media);
-                found = true;
-            }  
-        }
-        if (!found) {
-            System.out.println("No media found with title containing: \"" + title + "\"");
-        }
-    }
-    public void sortByTitleCost() {
-        Collections.sort(itemsOrdered, Media.COMPARE_BY_TITLE_COST);
-        System.out.println("Cart has been sorted by title (A-Z), then by cost (descending).");
-    }
-
-    // Method 2: sort theo cost giảm dần → title
-    public void sortByCostTitle() {
-        Collections.sort(itemsOrdered, Media.COMPARE_BY_COST_TITLE);
-        System.out.println("Cart has been sorted by cost (descending), then by title (A-Z).");
-    }
-    
-
-    // Getter (nếu cần)
-    public List<Media> getItemsOrdered() {
-        return itemsOrdered;
     }
 }
