@@ -38,11 +38,28 @@ public abstract class Media{   // ← XÓA implements Comparable<Media>
             category != null ? category : "Unknown",
             cost);
     }
+    @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;                    // 1. Nếu 2 object là cùng 1 cái → bằng nhau
-        if (obj == null || !(obj instanceof Track)) return false; // 2. Nếu obj là null hoặc không phải Track → không bằng
-        Media other = (Media) obj;                       // 3. ← CHÍNH LÀ DÒNG NÀY!
-        return title.equals(other.getTitle());
+        // 1. Kiểm tra null
+        if (obj == null) {
+            return false;
+        }
+
+        // 2. Kiểm tra cùng instance hoặc cùng class
+        if (!(obj instanceof Media)) {
+            return false;
+        }
+
+        // 3. Ép kiểu và so sánh title
+        Media other = (Media) obj;
+
+        // 4. Kiểm tra NullPointerException cho title
+        if (this.getTitle() == null) {
+            return other.getTitle() == null;
+        }
+
+        // 5. So sánh title (không phân biệt hoa thường như yêu cầu phổ biến)
+        return this.getTitle().equals(other.getTitle());
     }
 
 }

@@ -3,6 +3,8 @@ package hust.soict.dsai.aims.media;
 import java.util.ArrayList;
 import java.util.List;
 
+import hust.soict.dsai.aims.exception.PlayerException;
+
 public class CompactDisc extends Disc implements Playable{
 
     // ==================== 2 fields mới theo yêu cầu ====================
@@ -75,28 +77,22 @@ public class CompactDisc extends Disc implements Playable{
                " - " + getLength() + " min: " + getCost() + " $";
     }
     @Override
-    public void play() {
-        System.out.println("Playing CD: " + getTitle());
-        System.out.println("Artist: " + artist);
-        System.out.println("CD total length: " + getLength() + " minutes");
-        System.out.println("=== Track List ===");
-        
-        if (tracks.isEmpty()) {
-            System.out.println("No tracks in this CD.");
-        } else {
-            for (int i = 0; i < tracks.size(); i++) {
-                System.out.println((i + 1) + ". " + tracks.get(i).getTitle() 
-                                 + " (" + tracks.get(i).getLength() + " min)");
-            }
+    public void play() throws PlayerException {
+        if (this.getLength() <= 0) {
+            throw new PlayerException("ERROR: CD length is non-positive!");
         }
-        System.out.println("==================");
 
-        // Gọi play() cho từng track
+        System.out.println("Playing CD: " + this.getTitle());
+        System.out.println("CD length: " + this.getLength());
+
         for (Track track : tracks) {
             try {
-                track.play();           // mỗi track sẽ tự in thông tin
-            } catch (Exception e) {
-                System.err.println("Cannot play track: " + track.getTitle());
+                track.play();
+            } catch (PlayerException e) {
+                // In lỗi ra console như yêu cầu
+                System.err.println(e.getMessage());
+                // Ném lại để CD không chơi tiếp nếu có track lỗi
+                throw e;
             }
         }
     }

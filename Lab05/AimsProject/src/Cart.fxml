@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane prefHeight="768.0" prefWidth="1024.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+   <top>
+      <VBox prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text="Options">
+                  <items>
+                        <Menu mnemonicParsing="false" text="Update Store">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Add Book" />
+                              <MenuItem mnemonicParsing="false" text="Add CD" />
+                              <MenuItem mnemonicParsing="false" text="Add DVD" />
+                           </items>
+                        </Menu>
+                    <MenuItem mnemonicParsing="false" text="View Store" />
+                        <MenuItem mnemonicParsing="false" text="View Cart" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <Label text="CART" textFill="AQUA">
+               <font>
+                  <Font size="50.0" />
+               </font>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </Label>
+         </children>
+      </VBox>
+   </top>
+   <right>
+      <VBox alignment="TOP_CENTER" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets top="50.0" />
+         </padding>
+         <children>
+            <HBox alignment="CENTER" />
+            <Label text="Total">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label text="0$" textFill="AQUA">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Button mnemonicParsing="false" style="-fx-background-color: red;" text="Place Order" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
+   </right>
+   <bottom>
+      <VBox BorderPane.alignment="CENTER">
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+         <children>
+            <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="10.0">
+               <opaqueInsets>
+                  <Insets bottom="10.0" top="10.0" />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding>
+               <children>
+                  <Label text="Filter" />
+                  <TextField />
+                  <RadioButton mnemonicParsing="false" selected="true" text="By ID">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="filterCategory" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton mnemonicParsing="false" text="By Title" toggleGroup="$filterCategory" />
+               </children>
+            </HBox>
+            <TableView fx:id="tblMedia">
+              <columns>
+                <TableColumn fx:id="colMediaTitle" prefWidth="419.0" text="Title" />
+                <TableColumn fx:id="colMediacategory" prefWidth="247.0" text="Category" />
+                  <TableColumn fx:id="colMediaCost" minWidth="100.0" prefWidth="323.0" text="Cost" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <HBox />
+            <Button mnemonicParsing="false" text="Play" />
+            <Button mnemonicParsing="false" text="Remove" />
+         </children>
+      </VBox>
+   </bottom>
+</BorderPane>
