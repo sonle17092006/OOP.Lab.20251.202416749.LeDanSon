@@ -4,49 +4,54 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import hust.soict.dsai.aims.cart.Cart;
 import hust.soict.dsai.aims.media.Media;
 import hust.soict.dsai.aims.media.Playable;
 
 public class MediaStore extends JPanel {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private Media media;
+    private static final long serialVersionUID = 1L;
+    private Media media;
+    private Cart cart;
 
-    public MediaStore(Media media) {
+    public MediaStore(Media media, Cart cart) {
         this.media = media;
+        this.cart = cart;
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JLabel title = new JLabel(media.getTitle());
         title.setFont(new Font(title.getFont().getName(), Font.PLAIN, 20));
-        title.setAlignmentX(CENTER_ALIGNMENT);
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel cost = new JLabel(" " + media.getCost() + " $");
-        cost.setAlignmentX(CENTER_ALIGNMENT);
+        JLabel cost = new JLabel(media.getCost() + " $");
+        cost.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JPanel container = new JPanel();
-        container.setLayout(new FlowLayout(FlowLayout.CENTER));
+        JPanel container = new JPanel(new FlowLayout());
+        
+        JButton addBtn = new JButton("Add to Cart");
+        addBtn.addActionListener(e -> {
+            cart.addMedia(media);
+            JOptionPane.showMessageDialog(this, 
+                "\"" + media.getTitle() + "\" added to cart!");
+        });
+        container.add(addBtn);
 
-        container.add(new JButton("Add to cart"));
-        if (media instanceof Playable) {
-        	JButton playBtn = new JButton("Play");
+        if (media instanceof Playable playable) {
+            JButton playBtn = new JButton("Play");
             playBtn.addActionListener(e -> {
-                if (media instanceof Playable) {
-                    ((Playable) media).play(); // gọi play() thật
-                    new PlayMediaDialog((Playable) media); // hiện dialog
-                }
+                playable.play();
+                new PlayMediaDialog(playable);
             });
             container.add(playBtn);
         }
 
-        this.add(Box.createVerticalGlue());
-        this.add(title);
-        this.add(cost);
-        this.add(Box.createVerticalGlue());
-        this.add(container);
+        add(Box.createVerticalStrut(10));
+        add(title);
+        add(cost);
+        add(Box.createVerticalStrut(10));
+        add(container);
+        add(Box.createVerticalGlue());
 
-        this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
     }
 }
