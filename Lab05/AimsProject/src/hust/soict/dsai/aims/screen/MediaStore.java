@@ -5,6 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 
 import hust.soict.dsai.aims.cart.Cart;
+import hust.soict.dsai.aims.exception.PlayerException;
 import hust.soict.dsai.aims.media.Media;
 import hust.soict.dsai.aims.media.Playable;
 
@@ -39,7 +40,18 @@ public class MediaStore extends JPanel {
         if (media instanceof Playable playable) {
             JButton playBtn = new JButton("Play");
             playBtn.addActionListener(e -> {
-                playable.play();
+                try {
+                    playable.play();  // gọi play()
+                } catch (PlayerException ex) {
+                    // Hiện dialog lỗi (hoặc in console)
+                    JOptionPane.showMessageDialog(
+                        null,
+                        ex.getMessage(),
+                        "Cannot play media",
+                        JOptionPane.ERROR_MESSAGE
+                    );
+                }
+                // Vẫn hiện dialog play bình thường (nếu play thành công)
                 new PlayMediaDialog(playable);
             });
             container.add(playBtn);

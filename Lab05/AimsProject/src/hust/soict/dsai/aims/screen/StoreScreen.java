@@ -1,6 +1,12 @@
 package hust.soict.dsai.aims.screen;
 
 import java.awt.*;
+import java.awt.event.*;          // DÒNG NÀY LÀ QUAN TRỌNG NHẤT!
+import java.util.ArrayList;
+import javax.swing.*;
+import hust.soict.dsai.aims.cart.Cart;
+import hust.soict.dsai.aims.media.*;
+import hust.soict.dsai.aims.store.Store;
 import java.util.ArrayList;
 import javax.swing.*;
 import hust.soict.dsai.aims.cart.Cart;
@@ -69,8 +75,8 @@ public class StoreScreen extends JFrame {
         cartButton.setPreferredSize(new Dimension(100, 50));
         cartButton.setMaximumSize(new Dimension(100, 50));
 
-        // Optional: mở CartScreen khi bấm (bạn có thể thêm sau)
-        // cartButton.addActionListener(e -> new CartScreen(cart));
+        // ← DÒNG QUAN TRỌNG NHẤT – BẠN ĐÃ QUÊN DÒNG NÀY!
+        cartButton.addActionListener(e -> new CartScreen(cart));
 
         header.add(Box.createRigidArea(new Dimension(10, 10)));
         header.add(title);
@@ -104,7 +110,7 @@ public class StoreScreen extends JFrame {
     // ==================== MAIN ====================
     public static void main(String[] args) {
         Store store = new Store();
-        Cart cart = new Cart();               // ← Tạo Cart thật
+        Cart testCart = new Cart();               // ← Tạo Cart thật
 
         // Thêm đủ 9+ media để test
         store.addMedia(new DigitalVideoDisc("The Lion King", "Animation", "Roger Allers", 87, 19.95f));
@@ -117,8 +123,16 @@ public class StoreScreen extends JFrame {
         store.addMedia(new DigitalVideoDisc("Inception", "Science Fiction", "Christopher Nolan", 148, 22.95f));
         store.addMedia(new Book("Clean Code", "Technology", 45.00f));
 
+
+        // Add some sample media (DVD, Book, CD) – same as in StoreScreen.main()
+        testCart.addMedia(new DigitalVideoDisc("The Lion King", "Animation", "Roger Allers", 87, 19.95f));
+        testCart.addMedia(new DigitalVideoDisc("Star Wars", "Science Fiction", "George Lucas", 120, 24.95f));
+        testCart.addMedia(new Book("Harry Potter", "Fantasy", 29.99f));
+        testCart.addMedia(new CompactDisc("Thriller", "Pop", 15.99f, "Michael Jackson"));
+        testCart.addMedia(new Book("Clean Code", "Technology", 45.00f));
+
         SwingUtilities.invokeLater(() -> {
-            new StoreScreen(store, cart);     // ← Truyền cả store và cart vào
+            new StoreScreen(store, testCart);     // ← Truyền cả store và cart vào
         });
     }
 }

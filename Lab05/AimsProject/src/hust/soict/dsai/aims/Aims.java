@@ -1,8 +1,10 @@
 package hust.soict.dsai.aims;
+import javax.swing.JOptionPane;
 
 import java.util.List;
 import java.util.Scanner;
 import hust.soict.dsai.aims.cart.Cart;
+import hust.soict.dsai.aims.exception.PlayerException;
 import hust.soict.dsai.aims.store.Store;
 import hust.soict.dsai.aims.media.*;
 
@@ -64,7 +66,14 @@ public class Aims {
             switch (choice) {
                 case 1 -> seeMediaDetails();
                 case 2 -> addToCart();
-                case 3 -> playMedia();
+                case 3 -> {
+                    try {
+                        playMedia();
+                    } catch (Exception e) {  // dùng Exception thay vì PlayerException
+                        JOptionPane.showMessageDialog(null, e.getMessage(), "Cannot play media", JOptionPane.ERROR_MESSAGE);
+                        e.printStackTrace();
+                    }
+                }
                 case 4 -> seeCurrentCart();
                 case 0 -> { return; }
             }
@@ -109,18 +118,31 @@ public class Aims {
 
     // ==================== PLAY MEDIA ====================
     public static void playMedia() {
-        System.out.println("Id to play: ");
-        String s = scanner.nextLine();
-        int id = Integer.parseInt(s);
-        if (id > 0 && id <= store.getItemsInStore().size()) {
-            Media media = store.getItemsInStore().get(id - 1);
-            if (media instanceof Playable) {
-                ((Playable) media).play();
-            } else {
-                System.out.println("This media cannot be played.");
+        Media selectedMedia = media; // currentMedia là field mày đang có
+
+        if (selectedMedia == null) {
+            JOptionPane.showMessageDialog(null, "No media selected!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (selectedMedia instanceof Playable) {
+            try {
+                ((Playable) selectedMedia).play();
+            } catch (PlayerException e) {
+                // In ra console như yêu cầu
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+
+                // Hiện dialog đúng như Figure 49
+                JOptionPane.showMessageDialog(
+                    null,
+                    "Error: " + e.getMessage(),
+                    "Illegal DVD Length",
+                    JOptionPane.ERROR_MESSAGE
+                );
             }
         } else {
-            System.out.println("Invalid ID.");
+            JOptionPane.showMessageDialog(null, "This media cannot be played!", "Info", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -243,7 +265,7 @@ public class Aims {
         }
     }
 
-    public static void playMediaInCart() {
+    public static void playMediaInCart() throws PlayerException {
         System.out.println("Id to play: ");
         String s = scanner.nextLine();
         int id = Integer.parseInt(s);
